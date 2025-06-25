@@ -1,0 +1,107 @@
+# Source files (only ship compiled dist/)
+src/
+test/
+tests/
+
+# Development configuration files
+.eslintrc*
+.prettierrc*
+jest.config.*
+tsconfig.json
+.editorconfig
+
+# Development dependencies and scripts
+.github/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build and development artifacts
+.nyc_output
+coverage/
+.eslintcache
+.prettiercache
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Environment files
+.env*
+!.env.example
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Documentation source (keep README.md)
+docs/
+*.md
+!README.md
+
+# Git files
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD files
+.travis.yml
+.circleci/
+.github/
+appveyor.yml
+azure-pipelines.yml
+
+# Package manager files
+.npmrc
+.yarnrc
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+.pnpm-store/
+
+# Development scripts
+scripts/
+tools/
+
+# Examples and demos
+examples/
+demo/
+sample/
+
+# Miscellaneous
+.nvmrc
+.node-version
+.editorconfig
+.gitmodules
+
+# AWS specific
+.aws/
+*.pem
+*.key
+
+# Keep these files in the package
+!LICENSE*
+!NOTICE*
+!CHANGELOG*
+!CONTRIBUTING*
+!CODE_OF_CONDUCT*
+!SECURITY*
+!SUPPORT*
