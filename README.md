@@ -20,7 +20,7 @@ A lightweight library for generating short-term bearer tokens for AWS Bedrock AP
 ## Installation
 
 ```bash
-npm install aws-bedrock-token-generator
+npm install @aws/bedrock-token-generator
 ```
 
 ## Quick Start
@@ -28,7 +28,7 @@ npm install aws-bedrock-token-generator
 ### Basic Usage
 
 ```typescript
-import { BedrockTokenGenerator } from 'aws-bedrock-token-generator';
+import { BedrockTokenGenerator } from '@aws/bedrock-token-generator';
 import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
 
 async function example() {
@@ -49,7 +49,7 @@ async function example() {
 ### Using with Specific Credentials
 
 ```typescript
-import { BedrockTokenGenerator } from 'aws-bedrock-token-generator';
+import { BedrockTokenGenerator } from '@aws/bedrock-token-generator';
 
 async function example() {
     const generator = new BedrockTokenGenerator();
@@ -66,7 +66,7 @@ async function example() {
 ### Using with Session Token
 
 ```typescript
-import { BedrockTokenGenerator } from 'aws-bedrock-token-generator';
+import { BedrockTokenGenerator } from '@aws/bedrock-token-generator';
 
 async function example() {
     const generator = new BedrockTokenGenerator();
@@ -84,7 +84,7 @@ async function example() {
 ### Using with Different Credential Providers
 
 ```typescript
-import { BedrockTokenGenerator } from 'aws-bedrock-token-generator';
+import { BedrockTokenGenerator } from '@aws/bedrock-token-generator';
 import { fromInstanceMetadata, fromEnv } from '@aws-sdk/credential-providers';
 
 async function example() {
