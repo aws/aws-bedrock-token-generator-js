@@ -11,7 +11,6 @@ A lightweight library for generating short-term bearer tokens for AWS Bedrock AP
 
 - ✅ **Simple API**: Single method to generate bearer tokens
 - ✅ **Secure**: Uses AWS SigV4 signing with 12-hour token expiration
-- ✅ **Multi-region support**: Works with any AWS region where Bedrock is available
 - ✅ **AWS SDK Integration**: Seamlessly works with AWS credential providers
 - ✅ **Lightweight**: Minimal dependencies, focused functionality
 - ✅ **Well-tested**: Comprehensive unit tests with multiple scenarios
