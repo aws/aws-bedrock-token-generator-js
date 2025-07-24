@@ -9,8 +9,8 @@ A lightweight library for generating short-term bearer tokens for AWS Bedrock AP
 
 ## Features
 
-- ✅ **Simple API**: Single method to generate bearer tokens
-- ✅ **Secure**: Uses AWS SigV4 signing with 12-hour token expiration
+- ✅ **Simple API**: Async functions that generate bearer tokens
+- ✅ **Secure**: Uses AWS SigV4 signing with configurable token expiration (up to 12 hours)
 - ✅ **AWS SDK Integration**: Seamlessly works with AWS credential providers
 - ✅ **Lightweight**: Minimal dependencies, focused functionality
 - ✅ **Well-tested**: Comprehensive unit tests with multiple scenarios
@@ -24,121 +24,116 @@ npm install @aws/bedrock-token-generator
 
 ## Quick Start
 
-### Basic Usage
+### Using Token Provider with Default Credential and Region Provider
 
 ```typescript
-import { BedrockTokenGenerator } from '@aws/bedrock-token-generator';
-import { fromNodeProviderChain } from '@aws-sdk/credential-providers';
+import { getTokenProvider } from "@aws/bedrock-token-generator";
+
+// Create a token provider that uses default credentials and region providers.
+// You can configure it to use other credential providers.
+const provideToken = getTokenProvider();
 
 async function example() {
-    // Create token generator
-    const generator = new BedrockTokenGenerator();
     
-    // Get credentials from default provider chain
-    const credentials = fromNodeProviderChain();
-    
-    // Generate token
-    const token = await generator.generateToken(credentials, 'us-west-2');
-    
-    // Use the token for API calls (valid for 12 hours)
-    console.log(`Bearer Token: ${token}`);
+  const token = await provideToken();
+
+  // Use the token for API calls. The token has a default expiration of 12 hour.
+  // If the expiresInSeconds parameter is specified during token creation, the 
+  // expiration can be configured up to a maximum of 12 hours. However, the actual 
+  // token validity period will always be the minimum of the requested expiration 
+  // time and the AWS credentials' expiry time
+  console.log(`Bearer Token: ${token}`);
 }
 ```
 
-### Using with Specific Credentials
+### Using Token Provider with Credential Provider and Region
+
+You can find the supported credentials provider [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-credential-providers/).
 
 ```typescript
-import { BedrockTokenGenerator } from '@aws/bedrock-token-generator';
+import { getTokenProvider } from "@aws/bedrock-token-generator";
+import { fromTemporaryCredentials } from "@aws-sdk/credential-providers";
+
+const provideToken = getTokenProvider({
+  credentials: fromTemporaryCredentials({
+    params: {
+      RoleArn: "arn:aws:iam::123456789012:role/BedrockRole",
+    },
+  }),
+  region: "us-east-1",
+});
 
 async function example() {
-    const generator = new BedrockTokenGenerator();
     
-    const credentials = {
-        accessKeyId: 'YOUR_ACCESS_KEY_ID',
-        secretAccessKey: 'YOUR_SECRET_ACCESS_KEY'
-    };
-    
-    const token = await generator.generateToken(credentials, 'us-east-1');
+  const token = await provideToken();
+
+  // Use the token for API calls. The token has a default expiration of 12 hour.
+  // If the expiresInSeconds parameter is specified during token creation, the 
+  // expiration can be configured up to a maximum of 12 hours. However, the actual 
+  // token validity period will always be the minimum of the requested expiration 
+  // time and the AWS credentials' expiry time
+  console.log(`Bearer Token: ${token}`);
 }
 ```
 
-### Using with Session Token
+### Using Token Provider with Specific Credentials, Region and Expiry
 
 ```typescript
-import { BedrockTokenGenerator } from '@aws/bedrock-token-generator';
+import { getTokenProvider } from "@aws/bedrock-token-generator";
+
+const credentials = {
+  accessKeyId: "YOUR_ACCESS_KEY_ID",
+  secretAccessKey: "YOUR_SECRET_ACCESS_KEY",
+  sessionToken: "YOUR_SESSION_TOKEN",
+};
+
+const provideToken = getTokenProvider({
+  credentials,
+  region: "us-east-1",
+  expiresInSeconds: 7200,
+});
 
 async function example() {
-    const generator = new BedrockTokenGenerator();
-    
-    const credentials = {
-        accessKeyId: 'YOUR_ACCESS_KEY_ID',
-        secretAccessKey: 'YOUR_SECRET_ACCESS_KEY',
-        sessionToken: 'YOUR_SESSION_TOKEN'
-    };
-    
-    const token = await generator.generateToken(credentials, 'eu-west-1');
+  const token = await provideToken();
+
+  // Use the token for API calls. The token has an expiration of 2 hour. However, the actual token validity period
+  // will always be the minimum of the requested expiration time and the AWS credentials' expiry time
+  console.log(`Bearer Token: ${token}`);
 }
 ```
 
-### Using with Different Credential Providers
+### Using Stateless Function with Specific Credentials, Region and Expiry
 
 ```typescript
-import { BedrockTokenGenerator } from '@aws/bedrock-token-generator';
-import { fromInstanceMetadata, fromEnv } from '@aws-sdk/credential-providers';
+import { getToken } from "@aws/bedrock-token-generator";
 
 async function example() {
-    const generator = new BedrockTokenGenerator();
-    
-    // Using EC2 instance metadata
-    const ec2Credentials = fromInstanceMetadata();
-    const token1 = await generator.generateToken(ec2Credentials, 'us-west-2');
-    
-    // Using environment variables
-    const envCredentials = fromEnv();
-    const token2 = await generator.generateToken(envCredentials, 'us-east-1');
+  const credentials = {
+    accessKeyId: "YOUR_ACCESS_KEY_ID",
+    secretAccessKey: "YOUR_SECRET_ACCESS_KEY",
+    sessionToken: "YOUR_SESSION_TOKEN",
+  };
+
+  const token = await getToken({
+    credentials,
+    region: "us-east-1",
+    expiresInSeconds: 7200,
+  });
+
+  // Use the token for API calls. The token has an expiration of 2 hour. However, the actual token validity period
+  // will always be the minimum of the requested expiration time and the AWS credentials' expiry time
+  console.log(`Bearer Token: ${token}`);
 }
 ```
 
 ## API Reference
 
-### BedrockTokenGenerator
-
-#### Constructor
-
-```typescript
-new BedrockTokenGenerator(config?: BedrockTokenGeneratorConfig)
-```
-
-**Parameters:**
-- `config` (optional): Configuration object
-  - `expiresIn`: Token expiration time in seconds (default: 43200 - 12 hours)
-
-#### generateToken(credentials, region)
-
-Generates a bearer token for AWS Bedrock API authentication.
-
-**Parameters:**
-- `credentials`: AWS credentials to use for signing
-  - Must contain `accessKeyId` and `secretAccessKey`
-  - May optionally contain `sessionToken`
-- `region`: AWS region identifier (e.g., "us-west-2")
-
-**Returns:**
-- Promise that resolves to a bearer token string valid for 12 hours
-
-**Throws:**
-- Error if credentials or region are invalid
-- AWS SDK errors for service-related issues
-
-**Example:**
-```typescript
-const generator = new BedrockTokenGenerator();
-const token = await generator.generateToken(credentials, "us-west-2");
-```
+- [API Reference](apidocs/README.md) - Detailed API documentation
 
 ## Token Format
 
 The generated tokens follow this format:
+
 ```
 bedrock-api-key-<base64-encoded-presigned-url>&Version=1
 ```
@@ -146,11 +141,14 @@ bedrock-api-key-<base64-encoded-presigned-url>&Version=1
 - **Prefix**: `bedrock-api-key-` identifies the token type
 - **Payload**: Base64-encoded presigned URL with embedded credentials
 - **Version**: `&Version=1` for future compatibility
-- **Expiration**: 12 hours from generation time
+- **Expiration**: The token has a default expiration of 12 hour. If the expiresInSeconds parameter is specified during token creation, the expiration can be configured up to a maximum of 12 hours. However, the actual token validity period will always
+  be the minimum of the requested expiration time and the AWS credentials' expiry time.
 
 ## Security Considerations
 
-- **Token Expiration**: Tokens are valid for 12 hours and cannot be renewed
+- **Token Expiration**: The token has a default expiration of 12 hour. If the expiresInSeconds parameter is specified during token creation, the expiration can be configured up to a maximum of 12 hours. However, the actual token validity period will always
+  be the minimum of the requested expiration time and the AWS credentials' expiry time. The token must be generated again once it expires,
+  as it cannot be refreshed or extended.
 - **Secure Storage**: Store tokens securely and avoid logging them
 - **Credential Management**: Use IAM roles and temporary credentials when possible
 - **Network Security**: Always use HTTPS when transmitting tokens

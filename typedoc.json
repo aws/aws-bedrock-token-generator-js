@@ -1,0 +1,7 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "out": "apidocs",
+  "readme": "none",
+  "plugin": ["typedoc-plugin-markdown"],
+  "disableSources": true
+}
