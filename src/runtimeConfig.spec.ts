@@ -62,6 +62,7 @@ describe("runtimeConfig", () => {
       credentials: MOCK_CREDENTIALS,
       region: MOCK_REGION,
       expiresInSeconds: 7200,
+      sha256: expect.any(Function),
     });
 
     // Verify provider functions were not called
@@ -79,6 +80,7 @@ describe("runtimeConfig", () => {
     expect(result).toEqual({
       credentials: MOCK_PROVIDER_CHAIN_CREDENTIALS,
       region: MOCK_REGION,
+      sha256: expect.any(Function),
     });
 
     expect(fromNodeProviderChain).toHaveBeenCalledWith({

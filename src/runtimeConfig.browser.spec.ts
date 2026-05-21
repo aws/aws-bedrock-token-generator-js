@@ -42,6 +42,7 @@ describe("runtimeConfig.browser", () => {
       credentials: MOCK_CREDENTIALS,
       region: MOCK_REGION,
       expiresInSeconds: 7200,
+      sha256: expect.any(Function),
     });
 
     // Verify invalidProvider was not called

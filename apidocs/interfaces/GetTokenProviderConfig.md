@@ -16,7 +16,7 @@ Configuration options for creating a reusable AWS Bedrock API token provider.
 
 ### credentials?
 
-> `optional` **credentials**: `AwsCredentialIdentity` \| `AwsCredentialIdentityProvider`
+> `optional` **credentials?**: `AwsCredentialIdentity` \| `AwsCredentialIdentityProvider`
 
 AWS credentials to use for signing.
 Can be either static credentials or a credentials provider function.
@@ -27,13 +27,13 @@ Can be either static credentials or a credentials provider function.
 
 #### Inherited from
 
-`Partial.credentials`
+[`GetTokenConfig`](GetTokenConfig.md).[`credentials`](GetTokenConfig.md#credentials)
 
 ***
 
 ### expiresInSeconds?
 
-> `optional` **expiresInSeconds**: `number`
+> `optional` **expiresInSeconds?**: `number`
 
 Token expiration time in seconds. The expiration can be configured up to a maximum of 12 hours.
 However, the actual token validity period will always be the minimum of the requested expiration time
@@ -47,13 +47,13 @@ and the AWS credentials' expiry time.
 
 #### Inherited from
 
-`Partial.expiresInSeconds`
+[`GetTokenConfig`](GetTokenConfig.md).[`expiresInSeconds`](GetTokenConfig.md#expiresinseconds)
 
 ***
 
 ### profile?
 
-> `optional` **profile**: `string`
+> `optional` **profile?**: `string`
 
 AWS profile name to use when loading credentials from shared config.
 
@@ -61,10 +61,23 @@ AWS profile name to use when loading credentials from shared config.
 
 ### region?
 
-> `optional` **region**: `string`
+> `optional` **region?**: `string`
 
 AWS region to use for the token (e.g., "us-west-2").
 
 #### Inherited from
 
-`Partial.region`
+[`GetTokenConfig`](GetTokenConfig.md).[`region`](GetTokenConfig.md#region)
+
+***
+
+### sha256?
+
+> `optional` **sha256?**: `ChecksumConstructor`
+
+SHA-256 implementation used by SignatureV4. Defaults to the platform-native
+implementation.
+
+#### Inherited from
+
+[`GetTokenConfig`](GetTokenConfig.md).[`sha256`](GetTokenConfig.md#sha256)

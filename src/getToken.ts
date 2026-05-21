@@ -6,8 +6,10 @@
 import {
   AwsCredentialIdentity,
   AwsCredentialIdentityProvider,
+  ChecksumConstructor,
 } from "@smithy/types";
 import { createToken, validateTokenExpiryInput } from "./token";
+import { getCreateTokenConfig } from "./runtimeConfig";
 
 /**
  * Configuration options for generating an AWS Bedrock API token.
@@ -32,6 +34,12 @@ export interface GetTokenConfig {
    * @default 43200 (12 hour)
    */
   expiresInSeconds?: number;
+
+  /**
+   * SHA-256 implementation used by SignatureV4. Defaults to the platform-native
+   * implementation.
+   */
+  sha256?: ChecksumConstructor;
 }
 
 /**
@@ -48,5 +56,5 @@ export interface GetTokenConfig {
  */
 export const getToken = async (config: GetTokenConfig): Promise<string> => {
   validateTokenExpiryInput(config.expiresInSeconds);
-  return createToken(config);
+  return createToken(getCreateTokenConfig(config));
 };

@@ -6,13 +6,13 @@
 
 # Function: getTokenProvider()
 
-> **getTokenProvider**(`config`): () => `Promise`\<`string`\>
+> **getTokenProvider**(`config?`): () => `Promise`\<`string`\>
 
 Creates a reusable token provider function with the specified configuration.
 
 ## Parameters
 
-### config
+### config?
 
 [`GetTokenProviderConfig`](../interfaces/GetTokenProviderConfig.md) = `{}`
 
@@ -22,11 +22,7 @@ Configuration options for the token provider
 
 An async function that generates AWS Bedrock API tokens when called
 
-> (): `Promise`\<`string`\>
-
-### Returns
-
-`Promise`\<`string`\>
+() => `Promise`\<`string`\>
 
 ## See
 
