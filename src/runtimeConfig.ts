@@ -9,6 +9,8 @@ import {
   NODE_REGION_CONFIG_FILE_OPTIONS,
   NODE_REGION_CONFIG_OPTIONS,
 } from "@smithy/config-resolver";
+import { Hash } from "@smithy/hash-node";
+import { ChecksumConstructor } from "@smithy/types";
 import { GetTokenProviderConfig } from "./getTokenProvider";
 import { CreateTokenConfig } from "./token";
 
@@ -31,5 +33,6 @@ export const getCreateTokenConfig = (
         ...NODE_REGION_CONFIG_FILE_OPTIONS,
         profile: config.profile,
       }),
+    sha256: config.sha256 ?? (Hash.bind(null, "sha256") as ChecksumConstructor),
   };
 };

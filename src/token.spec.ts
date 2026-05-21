@@ -6,11 +6,13 @@ import { SignatureV4 } from "@smithy/signature-v4";
 import { formatUrl } from "@aws-sdk/util-format-url";
 import { HttpRequest } from "@smithy/protocol-http";
 import { createToken, validateTokenExpiryInput } from "./token";
-import { AwsCredentialIdentity } from "@smithy/types";
+import { AwsCredentialIdentity, ChecksumConstructor } from "@smithy/types";
 
 jest.mock("@smithy/signature-v4");
 jest.mock("@aws-sdk/util-format-url");
 jest.mock("@smithy/protocol-http");
+
+const MOCK_SHA256 = jest.fn() as unknown as ChecksumConstructor;
 
 describe("token", () => {
   describe("createToken", () => {
@@ -44,13 +46,14 @@ describe("token", () => {
       const token = await createToken({
         credentials: MOCK_CREDENTIALS,
         region: MOCK_REGION,
+        sha256: MOCK_SHA256,
       });
 
       expect(SignatureV4).toHaveBeenCalledWith({
         service: "bedrock",
         region: MOCK_REGION,
         credentials: MOCK_CREDENTIALS,
-        sha256: expect.any(Function),
+        sha256: MOCK_SHA256,
       });
 
       // Verify presign was called with correct parameters
@@ -93,6 +96,7 @@ describe("token", () => {
         credentials: MOCK_CREDENTIALS,
         region: MOCK_REGION,
         expiresInSeconds: customExpiryTime,
+        sha256: MOCK_SHA256,
       });
 
       expect(mockPresign).toHaveBeenCalledWith(expect.any(Object), {
@@ -106,6 +110,7 @@ describe("token", () => {
       await createToken({
         credentials: credentialProvider,
         region: MOCK_REGION,
+        sha256: MOCK_SHA256,
       });
 
       // Verify SignatureV4 constructor was called with the credential provider
@@ -113,7 +118,7 @@ describe("token", () => {
         service: "bedrock",
         region: MOCK_REGION,
         credentials: credentialProvider,
-        sha256: expect.any(Function),
+        sha256: MOCK_SHA256,
       });
     });
 
@@ -123,6 +128,7 @@ describe("token", () => {
       await createToken({
         credentials: MOCK_CREDENTIALS,
         region: regionProvider,
+        sha256: MOCK_SHA256,
       });
 
       // Verify SignatureV4 constructor was called with the region provider
@@ -130,7 +136,7 @@ describe("token", () => {
         service: "bedrock",
         region: regionProvider,
         credentials: MOCK_CREDENTIALS,
-        sha256: expect.any(Function),
+        sha256: MOCK_SHA256,
       });
     });
 
@@ -143,6 +149,7 @@ describe("token", () => {
       const token = await createToken({
         credentials: MOCK_CREDENTIALS,
         region: MOCK_REGION,
+        sha256: MOCK_SHA256,
       });
 
       // Expected encoded value (without protocol prefix)
@@ -163,6 +170,7 @@ describe("token", () => {
       const token = await createToken({
         credentials: MOCK_CREDENTIALS,
         region: MOCK_REGION,
+        sha256: MOCK_SHA256,
       });
 
       // Decode the token and verify it doesn't contain the protocol prefix

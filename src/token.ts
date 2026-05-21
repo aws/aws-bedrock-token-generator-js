@@ -10,7 +10,6 @@ import {
   Provider,
 } from "@smithy/types";
 import { SignatureV4 } from "@smithy/signature-v4";
-import { Hash } from "@smithy/hash-node";
 import { HttpRequest } from "@smithy/protocol-http";
 import { formatUrl } from "@aws-sdk/util-format-url";
 
@@ -31,6 +30,7 @@ export interface CreateTokenConfig {
   expiresInSeconds?: number;
   credentials: AwsCredentialIdentity | AwsCredentialIdentityProvider;
   region: string | Provider<string>;
+  sha256: ChecksumConstructor;
 }
 
 /**
@@ -45,7 +45,7 @@ export const createToken = async (
     service: SERVICE_NAME,
     region: config.region,
     credentials: config.credentials,
-    sha256: Hash.bind(null, "sha256") as ChecksumConstructor,
+    sha256: config.sha256,
   });
 
   const request = new HttpRequest({

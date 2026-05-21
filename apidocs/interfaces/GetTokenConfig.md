@@ -25,7 +25,7 @@ Can be either static credentials or a credentials provider function.
 
 ### expiresInSeconds?
 
-> `optional` **expiresInSeconds**: `number`
+> `optional` **expiresInSeconds?**: `number`
 
 Token expiration time in seconds. The expiration can be configured up to a maximum of 12 hours.
 However, the actual token validity period will always be the minimum of the requested expiration time
@@ -44,3 +44,12 @@ and the AWS credentials' expiry time.
 > **region**: `string`
 
 AWS region to use for the token (e.g., "us-west-2").
+
+***
+
+### sha256?
+
+> `optional` **sha256?**: `ChecksumConstructor`
+
+SHA-256 implementation used by SignatureV4. Defaults to the platform-native
+implementation.

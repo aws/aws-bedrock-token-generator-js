@@ -51,7 +51,7 @@ describe("getToken", () => {
     );
   });
 
-  it("should call createToken with the provided config", async () => {
+  it("should call createToken with the resolved config", async () => {
     const config: GetTokenConfig = {
       credentials: MOCK_CREDENTIALS,
       region: MOCK_REGION,
@@ -60,7 +60,10 @@ describe("getToken", () => {
 
     await getToken(config);
 
-    expect(tokenModule.createToken).toHaveBeenCalledWith(config);
+    expect(tokenModule.createToken).toHaveBeenCalledWith({
+      ...config,
+      sha256: expect.any(Function),
+    });
   });
 
   it("should return the token from createToken", async () => {
@@ -84,7 +87,10 @@ describe("getToken", () => {
 
     await getToken(config);
 
-    expect(tokenModule.createToken).toHaveBeenCalledWith(config);
+    expect(tokenModule.createToken).toHaveBeenCalledWith({
+      ...config,
+      sha256: expect.any(Function),
+    });
   });
 
   it("should propagate errors from validateTokenExpiryInput", async () => {
