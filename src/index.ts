@@ -6,3 +6,8 @@
 export { BedrockTokenGenerator } from "./BedrockTokenGenerator";
 export { getToken, GetTokenConfig } from "./getToken";
 export { getTokenProvider, GetTokenProviderConfig } from "./getTokenProvider";
+export {
+  getRefreshingTokenProvider,
+  GetRefreshingTokenProviderConfig,
+  RefreshingTokenProvider,
+} from "./getRefreshingTokenProvider";

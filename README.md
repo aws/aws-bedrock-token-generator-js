@@ -34,13 +34,12 @@ import { getTokenProvider } from "@aws/bedrock-token-generator";
 const provideToken = getTokenProvider();
 
 async function example() {
-    
   const token = await provideToken();
 
   // Use the token for API calls. The token has a default expiration of 12 hour.
-  // If the expiresInSeconds parameter is specified during token creation, the 
-  // expiration can be configured up to a maximum of 12 hours. However, the actual 
-  // token validity period will always be the minimum of the requested expiration 
+  // If the expiresInSeconds parameter is specified during token creation, the
+  // expiration can be configured up to a maximum of 12 hours. However, the actual
+  // token validity period will always be the minimum of the requested expiration
   // time and the AWS credentials' expiry time
   console.log(`Bearer Token: ${token}`);
 }
@@ -64,13 +63,12 @@ const provideToken = getTokenProvider({
 });
 
 async function example() {
-    
   const token = await provideToken();
 
   // Use the token for API calls. The token has a default expiration of 12 hour.
-  // If the expiresInSeconds parameter is specified during token creation, the 
-  // expiration can be configured up to a maximum of 12 hours. However, the actual 
-  // token validity period will always be the minimum of the requested expiration 
+  // If the expiresInSeconds parameter is specified during token creation, the
+  // expiration can be configured up to a maximum of 12 hours. However, the actual
+  // token validity period will always be the minimum of the requested expiration
   // time and the AWS credentials' expiry time
   console.log(`Bearer Token: ${token}`);
 }
@@ -99,6 +97,30 @@ async function example() {
   // Use the token for API calls. The token has an expiration of 2 hour. However, the actual token validity period
   // will always be the minimum of the requested expiration time and the AWS credentials' expiry time
   console.log(`Bearer Token: ${token}`);
+}
+```
+
+### Using Refreshing Token Provider
+
+Use `getRefreshingTokenProvider` when an application needs to reuse a provider
+across many requests. It returns a cached token until the token is close to
+expiry, then generates a new token automatically.
+
+```typescript
+import { getRefreshingTokenProvider } from "@aws/bedrock-token-generator";
+
+const provideToken = getRefreshingTokenProvider({
+  region: "us-east-1",
+  expiresInSeconds: 7200,
+});
+
+async function example() {
+  const token = await provideToken();
+
+  // To force a refresh after an authentication error:
+  const refreshedToken = await provideToken.refresh();
+
+  console.log(`Bearer Token: ${refreshedToken}`);
 }
 ```
 
