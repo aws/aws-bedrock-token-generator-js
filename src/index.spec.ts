@@ -6,8 +6,8 @@
 import * as bedrockTokenGenerator from "./index";
 
 describe("@aws/bedrock-token-generator", () => {
-  it("has three exports", () => {
-    expect(Object.keys(bedrockTokenGenerator).length).toBe(3);
+  it("has four exports", () => {
+    expect(Object.keys(bedrockTokenGenerator).length).toBe(4);
   });
 
   it("exports getToken", () => {
@@ -16,6 +16,10 @@ describe("@aws/bedrock-token-generator", () => {
 
   it("exports getTokenProvider", () => {
     expect(bedrockTokenGenerator.getTokenProvider).toBeDefined();
+  });
+
+  it("exports getRefreshingTokenProvider", () => {
+    expect(bedrockTokenGenerator.getRefreshingTokenProvider).toBeDefined();
   });
 
   it("exports BedrockTokenGenerator", () => {
