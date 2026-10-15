@@ -126,6 +126,15 @@ async function example() {
 }
 ```
 
+### Command Line
+
+Print a token to stdout using the default credential chain:
+
+```bash
+npx @aws/bedrock-token-generator provide-token
+npx @aws/bedrock-token-generator provide-token --region us-west-2 --profile dev --expires-in-seconds 3600
+```
+
 ## API Reference
 
 - [API Reference](apidocs/README.md) - Detailed API documentation
